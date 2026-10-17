@@ -9,6 +9,151 @@
     ]
   },
   "Packages": {
+    "abind": {
+      "Package": "abind",
+      "Version": "1.4-8",
+      "Source": "Repository",
+      "Date": "2024-09-08",
+      "Title": "Combine Multidimensional Arrays",
+      "Authors@R": "c(person(\"Tony\", \"Plate\", email = \"tplate@acm.org\", role = c(\"aut\", \"cre\")), person(\"Richard\", \"Heiberger\", role = c(\"aut\")))",
+      "Maintainer": "Tony Plate <tplate@acm.org>",
+      "Description": "Combine multidimensional arrays into a single array. This is a generalization of 'cbind' and 'rbind'.  Works with vectors, matrices, and higher-dimensional arrays (aka tensors). Also provides functions 'adrop', 'asub', and 'afill' for manipulating, extracting and replacing data in arrays.",
+      "Depends": [
+        "R (>= 1.5.0)"
+      ],
+      "Imports": [
+        "methods",
+        "utils"
+      ],
+      "License": "MIT + file LICENSE",
+      "NeedsCompilation": "no",
+      "Author": "Tony Plate [aut, cre], Richard Heiberger [aut]",
+      "Repository": "CRAN",
+      "Encoding": "UTF-8"
+    },
+    "berryFunctions": {
+      "Package": "berryFunctions",
+      "Version": "1.22.13",
+      "Source": "Repository",
+      "Type": "Package",
+      "Title": "Function Collection Related to Plotting and Hydrology",
+      "Date": "2025-07-28",
+      "Imports": [
+        "grDevices",
+        "graphics",
+        "stats",
+        "utils",
+        "abind"
+      ],
+      "Suggests": [
+        "RColorBrewer",
+        "pbapply",
+        "knitr",
+        "rmarkdown",
+        "gstat",
+        "RCurl",
+        "colorspace",
+        "vioplot",
+        "spatstat.geom",
+        "ade4",
+        "nortest",
+        "rstudioapi",
+        "leaflet",
+        "leaflet.extras",
+        "zoo",
+        "R.utils"
+      ],
+      "Authors@R": "person(given=\"Berry\", family=\"Boessenkool\", role=c(\"aut\", \"cre\"), email=\"berry-b@gmx.de\")",
+      "Maintainer": "Berry Boessenkool <berry-b@gmx.de>",
+      "Description": "Draw horizontal histograms, color scattered points by 3rd dimension, enhance date- and log-axis plots, zoom in X11 graphics, trace errors and warnings,  use the unit hydrograph in a linear storage cascade, convert lists to data.frames and arrays,  fit multiple functions.",
+      "License": "GPL (>= 2)",
+      "URL": "https://github.com/brry/berryFunctions",
+      "RoxygenNote": "7.3.2",
+      "Encoding": "UTF-8",
+      "VignetteBuilder": "knitr",
+      "BugReports": "https://github.com/brry/berryFunctions/issues",
+      "NeedsCompilation": "no",
+      "Author": "Berry Boessenkool [aut, cre]",
+      "Repository": "CRAN"
+    },
+    "pbapply": {
+      "Package": "pbapply",
+      "Version": "1.7-5",
+      "Source": "Repository",
+      "Type": "Package",
+      "Title": "Adding Progress Bar to '*apply' Functions",
+      "Date": "2026-08-31",
+      "Authors@R": "c(person(given = \"Peter\", family = \"Solymos\", comment = c(ORCID = \"0000-0001-7337-1740\"), role = c(\"aut\", \"cre\"), email = \"psolymos@gmail.com\"), person(given = \"Zygmunt\", family = \"Zawadzki\", role = \"aut\", email = \"zygmunt@zstat.pl\"), person(given = \"Henrik\",  family = \"Bengtsson\",  role = \"ctb\", email = \"henrikb@braju.com\"), person(\"R Core Team\", role = c(\"cph\", \"ctb\")))",
+      "Maintainer": "Peter Solymos <psolymos@gmail.com>",
+      "Description": "A lightweight package that adds progress bar to vectorized R functions ('*apply'). The implementation can easily be added to functions where showing the progress is useful (e.g. bootstrap). The type and style of the progress bar (with percentages or remaining time) can be set through options. Supports several parallel processing backends including mirai and future.",
+      "Depends": [
+        "R (>= 3.2.0)"
+      ],
+      "Imports": [
+        "parallel"
+      ],
+      "Suggests": [
+        "shiny",
+        "future",
+        "future.apply"
+      ],
+      "License": "GPL (>= 2)",
+      "URL": "https://github.com/psolymos/pbapply, https://peter.solymos.org/pbapply/",
+      "BugReports": "https://github.com/psolymos/pbapply/issues",
+      "NeedsCompilation": "no",
+      "Author": "Peter Solymos [aut, cre] (ORCID: <https://orcid.org/0000-0001-7337-1740>), Zygmunt Zawadzki [aut], Henrik Bengtsson [ctb], R Core Team [cph, ctb]",
+      "Repository": "CRAN",
+      "Encoding": "UTF-8"
+    },
+    "rdwd": {
+      "Package": "rdwd",
+      "Version": "1.9.17",
+      "Source": "Repository",
+      "Title": "Select and Download Climate Data from 'DWD' (German Weather Service)",
+      "Date": "2026-07-01",
+      "Depends": [
+        "R(>= 2.10)"
+      ],
+      "Imports": [
+        "berryFunctions (>= 1.21.11)",
+        "pbapply"
+      ],
+      "Suggests": [
+        "RCurl",
+        "leaflet",
+        "knitr",
+        "rmarkdown",
+        "testthat",
+        "roxygen2",
+        "devtools",
+        "remotes",
+        "bit64",
+        "data.table",
+        "OSMscale",
+        "R.utils",
+        "ncdf4",
+        "readr",
+        "dwdradar",
+        "XML",
+        "terra (>= 1.8-60)",
+        "stars",
+        "shiny",
+        "gsheet",
+        "rnaturalearth"
+      ],
+      "Authors@R": "person(given = \"Berry\", family = \"Boessenkool\", role = c(\"aut\", \"cre\"), email = \"berry-b@gmx.de\")",
+      "Description": "Handle climate data from the 'DWD' ('Deutscher Wetterdienst', see  <https://www.dwd.de/EN/climate_environment/cdc/cdc_node_en.html> for more information). Choose observational time series from meteorological stations with 'selectDWD()'. Find raster data from radar and interpolation according to <https://brry.github.io/rdwd/raster-data.html>. Download (multiple) data sets with progress bars and no re-downloads through 'dataDWD()'. Read both tabular observational data and binary gridded datasets with 'readDWD()'.",
+      "License": "GPL (>= 2)",
+      "Encoding": "UTF-8",
+      "URL": "https://brry.github.io/rdwd/",
+      "BugReports": "https://github.com/brry/rdwd/issues",
+      "VignetteBuilder": "knitr",
+      "Config/roxygen2/version": "8.0.0",
+      "NeedsCompilation": "no",
+      "Author": "Berry Boessenkool [aut, cre]",
+      "Maintainer": "Berry Boessenkool <berry-b@gmx.de>",
+      "Repository": "CRAN"
+    },
     "renv": {
       "Package": "renv",
       "Version": "1.1.8",
