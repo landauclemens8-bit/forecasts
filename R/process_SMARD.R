@@ -2,7 +2,8 @@ library(dplyr)
 library(lubridate)
 
 SMARD1 = read.csv2("data/raw/Realisierter_Stromverbrauch_2015_2021_Stunde.csv")
-SMARD2 = read.csv2("data/raw/Realisierter_Stromverbrauch_202101010000_202610160000_Stunde.csv")
+SMARD2 = read.csv2("data/raw/Realisierter_Stromverbrauch_202101010000_202610200000_Stunde.csv")
+head(SMARD1)
 
 SMARD = bind_rows(SMARD1, SMARD2)
 

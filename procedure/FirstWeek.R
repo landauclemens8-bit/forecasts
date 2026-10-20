@@ -4,3 +4,5 @@
     # stplit into raw and processed data, that I can easily update my data 
     # the ffm data set can be updatet by running a skript, the SMARD has to be downloaded again 
     # next step was to manage the time-zone issue (time shift)
+
+# then i did my first SMARD forecat with the Benchmark of the last 20 fridays at 12 
