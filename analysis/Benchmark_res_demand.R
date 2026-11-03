@@ -30,7 +30,7 @@ forecast_date = "2026-10-21"   # Mittwoch der Abgabe
 
 sub_res_demand = data.frame(
   forecast_date = forecast_date,
-  target  = "demand",
+  target  = "res_demand",
   horizon = c("36 hour", "40 hour", "44 hour", "60 hour", "64 hour", "68 hour"),
   round(quantiles, 2)
 )

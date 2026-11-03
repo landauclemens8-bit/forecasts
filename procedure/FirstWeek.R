@@ -6,3 +6,8 @@
     # next step was to manage the time-zone issue (time shift)
 
 # then i did my first SMARD forecat with the Benchmark of the last 20 fridays at 12 
+    # for both demand and re_demand 
+
+# then i downloaded via open-meteo API the forcast benchmark for temp and wind (ECMWF IFS 0.25°) Frankfurt airport
+  # then I converted the 51 ensemble members to the target quantiles by:
+  # formating the time, filtering the target days/hours, computing the quantiles 
