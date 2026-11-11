@@ -1,8 +1,8 @@
-
-
+library(dplyr)
+library(lubridate)
 ffm_clean = ffm %>% 
-  mutate(time_local = with_tz(time_utc, "Europe/Berlin")) |>   # new deutsche Zeit
-  mutate(date  = as.Date(time_local, tz = "Europe/Berlin"),
+  mutate(time_local = with_tz(time_utc, "UTC")) |>   # 
+  mutate(date  = as.Date(time_local, tz = "UTC"),
          year  = year(time_local),
          month = month(time_local),
          day   = day(time_local),

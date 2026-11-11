@@ -14,3 +14,4 @@ ffm = merge(temp[, c("MESS_DATUM", "TT_TU")],
 names(ffm) = c ("time_utc", "T2M", "WS10")
 
 saveRDS(ffm, "data/raw/ffm.rds")
+

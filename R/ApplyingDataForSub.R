@@ -6,4 +6,4 @@ res_demand_submission = read.csv2("data/processed/quantiles_res_demand.csv")
 
 submission = bind_rows(demand_submission, res_demand_submission, temp_submission, wind_submission)
 
-write.csv(submission, "submissions/firstWeek.csv", row.names = FALSE)
+write.csv(submission, "submissions/20261104_Laschlati.csv", row.names = FALSE)

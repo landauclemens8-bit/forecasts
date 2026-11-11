@@ -3,7 +3,7 @@ library(dplyr)
 library(lubridate)
 #Datensatz einlesen 
 SMARD = read.csv2("data/processed/SMARD.csv")
-
+head(SMARD)
 #days
 days = c(5,6)
 # hours
@@ -13,6 +13,8 @@ probs = c(0.025, 0.25, 0.5, 0.75, 0.975)
 # empty data frame for the quantiles
 quantiles = matrix(numeric(0), ncol = length(probs))
 #quantiles = data.frame()
+
+# letzten 20 Tage Freitage/Samstage
 for(wd in days){
   for (h in hours) {
     lastDays = SMARD |> 
@@ -22,16 +24,36 @@ for(wd in days){
     quantiles = rbind(quantiles,q)
   }
 }
-
 quantiles
 
-forecast_date = "2026-10-21"   # Mittwoch der Abgabe
+# this day in the last years
+quantilesDay = matrix(numeric(0), ncol = length(probs))
+lastYears = c(2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025)
+
+# datum bei jeder abgabe ändern, month in der for-schleife auch 
+datesO = c(7,8) 
+
+for (d in datesO) {
+  for (h in hours) {
+    lastYearDay = SMARD |> 
+      filter(year %in% lastYears,month == 11, day == d, hour == h)
+    q = quantile(lastYearDay$load, probs = probs, na.rm = TRUE)
+    quantilesDay = rbind(quantilesDay,q)
+  }
+}
+
+quantilesDay
+
+# mittelwert von den quantilen der letzten jahre an den tagen und der letzten Freitage und Samstage 
+newquants = (quantiles + quantilesDay)/2
+
+forecast_date = "2026-11-04"   # Mittwoch der Abgabe
 
 sub_demand = data.frame(
   forecast_date = forecast_date,
   target  = "demand",
   horizon = c("36 hour", "40 hour", "44 hour", "60 hour", "64 hour", "68 hour"),
-  round(quantiles, 2)
+  round(newquants, 2)
 )
 names(sub_demand)[4:8] = c("q0.025", "q0.25", "q0.5", "q0.75", "q0.975")
 rownames(sub_demand) = NULL

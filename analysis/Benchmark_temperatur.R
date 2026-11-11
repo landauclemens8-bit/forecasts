@@ -1,7 +1,7 @@
 
 
 library(jsonlite)
-
+library(dplyr)
 # URL linkt von open-Meteo API
 url = paste0("https://ensemble-api.open-meteo.com/v1/ensemble?latitude=50.0565&longitude=8.5925&hourly=temperature_2m,wind_speed_10m&models=ecmwf_ifs025_ensemble")
 
@@ -10,14 +10,17 @@ om = as.data.frame(fromJSON(url)$hourly)
 names(om)
 
 # getting time in the right format 
-om$time = as.POSIXct(om$time, format = "%Y-%m-%dT%H:%M", tz = "Europe/Berlin")
+om$time = as.POSIXct(om$time, format = "%Y-%m-%dT%H:%M", tz = "UTC")
 
+tail(om)
 # time to forecast
-targets_utc = as.POSIXct(c("2026-10-23 12:00", "2026-10-23 16:00", "2026-10-23 20:00",
-                            "2026-10-24 12:00", "2026-10-24 16:00", "2026-10-24 20:00"),
-                          tz = "Europe/Berlin")
+targets_utc = as.POSIXct(c("2026-11-13 12:00", "2026-11-13 16:00", "2026-11-13 20:00",
+                            "2026-11-14 12:00", "2026-11-14 16:00", "2026-11-14 20:00"),
+                          tz = "UTC")
 
 om_t = om |> filter(time %in% targets_utc)
+
+
 
 
 probs = c(0.025, 0.25, 0.5, 0.75, 0.975)
@@ -33,7 +36,7 @@ q_wind = t(apply(wind_members, 1, quantile, probs = probs, na.rm = TRUE))
 
 
 # formating for submission 
-forecast_date = "2026-10-21"   # Mittwoch der Abgabe
+forecast_date = "2026-11-11"   # Mittwoch der Abgabe
 # for temperature
 sub_q_temp = data.frame(
   forecast_date = forecast_date,
