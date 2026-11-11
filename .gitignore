@@ -4,3 +4,5 @@ data/processed/
 .Rhistory
 .RData
 .Ruserdata
+!data/raw/EMOS-Data/
+!data/raw/EMOS-Data/ensemble_archiv.csv
