@@ -8,6 +8,7 @@ on:
 jobs:
   update-data:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     
     permissions:
       contents: write # Wichtig, damit das Skript Änderungen in das Repo pushen darf
