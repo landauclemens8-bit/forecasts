@@ -25,8 +25,7 @@ cat("Lade aktuelle Ensemble-Daten von Open-Meteo herunter...\n")
 tryCatch({
   response = fromJSON(url)
   om_new = as.data.frame(response$hourly)
-  
-  # Zeitstempel der Generierung hinzufügen
+  om_new$time = as.character(om_new$time)
   om_new$issue_time = format(Sys.time(), "%Y-%m-%d %H:%M:%S", tz = "UTC")
   om_new = om_new %>% select(issue_time, time, everything())
   
@@ -36,19 +35,25 @@ tryCatch({
     
     om_new$time = as.character(om_new$time)
     om_old$time = as.character(om_old$time)
-    
-    om_combined = bind_rows(om_old, om_new) %>% 
-      distinct(issue_time, time, .keep_all = TRUE)
-    
-    write.csv(om_combined, archive_file, row.names = FALSE)
-    cat("Archiv erfolgreich aktualisiert. Gesamte Zeilen:", nrow(om_combined), "\n")
-    
+    om_old$issue_time = as.character(om_old$issue_time)
+    om_combined = bind_rows(om_old, om_new)
   } else {
-    write.csv(om_new, archive_file, row.names = FALSE)
-    cat("Neues Archiv erstellt mit", nrow(om_new), "Zeilen.\n")
+    om_combined = om_new
   }
+  
+  om_combined = om_combined %>%
+    arrange(desc(issue_time)) %>%        # neueste Vorhersage zuerst
+    distinct(time, .keep_all = TRUE) %>% # pro Zielzeitpunkt nur die neueste behalten
+    mutate(lead_h = as.numeric(difftime(
+      as.POSIXct(time, format = "%Y-%m-%dT%H:%M", tz = "UTC"),
+      as.POSIXct(issue_time, tz = "UTC"),
+      units = "hours"))) %>%
+    arrange(time)
+  
+  write.csv(om_combined, archive_file, row.names = FALSE)
+  cat("Archiv aktualisiert. Gesamte Zeilen:", nrow(om_combined), "\n")
   
 }, error = function(e) {
   cat("Fehler beim Herunterladen der Daten:", e$message, "\n")
-  quit(status = 1) # Beendet den Prozess mit Fehler, falls GitHub Actions abbrechen soll
+  quit(status = 1)
 })
