@@ -14,8 +14,8 @@ om$time = as.POSIXct(om$time, format = "%Y-%m-%dT%H:%M", tz = "UTC")
 
 tail(om)
 # time to forecast
-targets_utc = as.POSIXct(c("2026-11-13 12:00", "2026-11-13 16:00", "2026-11-13 20:00",
-                            "2026-11-14 12:00", "2026-11-14 16:00", "2026-11-14 20:00"),
+targets_utc = as.POSIXct(c("2026-11-20 12:00", "2026-11-20 16:00", "2026-11-20 20:00",
+                            "2026-11-21 12:00", "2026-11-21 16:00", "2026-11-21 20:00"),
                           tz = "UTC")
 
 om_t = om |> filter(time %in% targets_utc)
@@ -36,7 +36,7 @@ q_wind = t(apply(wind_members, 1, quantile, probs = probs, na.rm = TRUE))
 
 
 # formating for submission 
-forecast_date = "2026-11-11"   # Mittwoch der Abgabe
+forecast_date = "2026-11-18"   # Mittwoch der Abgabe
 # for temperature
 sub_q_temp = data.frame(
   forecast_date = forecast_date,
