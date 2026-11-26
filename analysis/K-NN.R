@@ -7,53 +7,56 @@ source("R/download_dwd.R")
 source("R/process_dwd.R")
 
 ffm = read.csv2("data/processed/ffm_clean.csv")
-tail(ffm)
 
-# remove rows with NAs
-ffm_temp = ffm %>% drop_na()
+# add cols with target values
+ffm_temp = ffm %>%
+  mutate(
+    ziel_36h = lead(T2M, 60),
+    ziel_40h = lead(T2M, 64),
+    ziel_44h = lead(T2M, 68),
+    ziel_60h = lead(T2M, 84),
+    ziel_64h = lead(T2M, 88),
+    ziel_68h = lead(T2M, 92)
+  )
 
-KNN_function = function(obs_time, features, k){
-  library(dplyr)
-  library(tidyr)
-  library(FNN)
-  ffm = read.csv2("data/processed/ffm_clean.csv")
+# remembering row number, remove NAs one time
+ffm_train = ffm_temp %>%
+  mutate(row_id = row_number()) %>%
+  drop_na() %>%
+  filter(hour == 23)               # always the same time, when the forecast is made
+
+KNN_function = function(obs_time, features, k,  w = rep(1, length(features))){
   
-  # remove rows with NAs
-  ffm_temp = ffm %>% drop_na()
+  # cuurent state beefore removing rows 
+  current_state = ffm_temp |>
+    filter(time_utc == obs_time) |>
+    select(all_of(features))
   
-  # add cols with target values
-  ffm_temp = ffm_temp %>%
-    mutate(
-      ziel_36h = lead(T2M, 60),   # 60, weil wir nur daten bis dienstag abend haben 
-      ziel_40h = lead(T2M, 64),   # deswegen müssen wir 24 stunden drauf rechen 
-      ziel_44h = lead(T2M, 68),
-      ziel_60h = lead(T2M, 84),
-      ziel_64h = lead(T2M, 88),
-      ziel_68h = lead(T2M, 92)
-    )
+  # for filter in next step 
+  i_now = which(ffm_temp$time_utc == obs_time)
+  hour_now = ffm_temp$hour[i_now]
+  # only rows, with known 92-h-target to obs_time, othwerwise would contain NAs
+  ffm_temp = ffm_train %>%
+    filter(row_id <= i_now - 92, hour == hour_now)
   
-  # cols I want to have an impact on K-NN
   feature_cols = features
-  
-  # scale the selected cols
+  # scale the data
   train_scaled = scale(ffm_temp[, feature_cols])
-  
-  # compute train center and scale, to scale the current values
   train_center = attr(train_scaled, "scaled:center")
   train_scale  = attr(train_scaled, "scaled:scale")
   
-  
-  current_state = ffm_temp |>
-    filter(time_utc == obs_time) |>
-    select(all_of(feature_cols))
-  
   current_scaled = scale(current_state, center = train_center, scale = train_scale)
   
-  neighbor_indices = knnx.index(data = train_scaled, query = as.matrix(current_scaled), k = k)[1, ]
+  
+  # weights of the features 
+  train_w   = sweep(train_scaled, 2, w, "*")
+  current_w = sweep(as.matrix(current_scaled), 2, w, "*")
+  
+  # brute-force statt kd-Baum
+  neighbor_indices = knnx.index(data = train_w, query = current_w,
+                                k = k, algorithm = "brute")[1, ]
   
   ziel_spalten = c("ziel_36h", "ziel_40h", "ziel_44h", "ziel_60h", "ziel_64h", "ziel_68h")
-  
-  # matrix with the k nearest neigbours 
   neighbor_outcomes_matrix = t(as.matrix(ffm_temp[neighbor_indices, ziel_spalten]))
   
   return(neighbor_outcomes_matrix)
@@ -61,12 +64,12 @@ KNN_function = function(obs_time, features, k){
 
 probs = c(0.025, 0.25, 0.5, 0.75, 0.975)
 
-features = c("T2M", "month", "hour", "day", "WS10")
-q_temp_KNN = t(apply(KNN_function("2026-11-17 23:00:00", features, 50), 1, quantile, probs = probs, na.rm = TRUE))
+features = c("T2M", "month", "day", "WS10")
+q_temp_KNN = t(apply(KNN_function("2026-11-23 23:00:00", features, 50), 1, quantile, probs = probs, na.rm = TRUE))
 
-q_temp_KNN = (q_temp_KNN + q_temp)/2
+# q_temp_KNN = (q_temp_KNN + q_temp)/2
 
-forecast_date = "2026-11-18"   # Mittwoch der Abgabe
+forecast_date = "2026-11-25"   # Mittwoch der Abgabe
 # for temperature
 
 su_q_temp = data.frame(

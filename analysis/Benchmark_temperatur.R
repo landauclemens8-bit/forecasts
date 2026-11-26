@@ -14,8 +14,8 @@ om$time = as.POSIXct(om$time, format = "%Y-%m-%dT%H:%M", tz = "UTC")
 
 tail(om)
 # time to forecast
-targets_utc = as.POSIXct(c("2026-11-20 12:00", "2026-11-20 16:00", "2026-11-20 20:00",
-                            "2026-11-21 12:00", "2026-11-21 16:00", "2026-11-21 20:00"),
+targets_utc = as.POSIXct(c("2026-11-27 12:00", "2026-11-27 16:00", "2026-11-27 20:00",
+                            "2026-11-28 12:00", "2026-11-28 16:00", "2026-11-28 20:00"),
                           tz = "UTC")
 
 om_t = om |> filter(time %in% targets_utc)
@@ -25,7 +25,6 @@ om_t = om |> filter(time %in% targets_utc)
 
 probs = c(0.025, 0.25, 0.5, 0.75, 0.975)
 
-robs = c(0.025, 0.25, 0.5, 0.75, 0.975)
 # part the data into T2M and WS10
 temp_members = om_t |> select(starts_with("temperature_2m"))
 wind_members = om_t |> select(starts_with("wind_speed_10m"))
